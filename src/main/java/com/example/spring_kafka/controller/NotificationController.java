@@ -9,8 +9,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/notification")
+@Tag(name = "Notification", description = "API for sending email notifications")
 public class NotificationController {
     private final EmailService emailService;
 
@@ -18,6 +25,20 @@ public class NotificationController {
         this.emailService = emailService;
     }
 
+    @Operation(
+            summary = "Sending an email manually",
+            description = "Allows you to manually send an email notification without using Kafka.",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "The letter was sent successfully.",
+                            content = @Content(
+                                    mediaType = "text/plain",
+                                    schema = @Schema(example = "Email sent to test@mail.com")
+                            )
+                    )
+            }
+    )
     @PostMapping("/send")
     public ResponseEntity<String> sendManualEmail(@RequestBody ManualNotificationRequest request) {
         emailService.sendEmail(request.getEmail(), request.getSubject(), request.getBody());
@@ -25,9 +46,13 @@ public class NotificationController {
         return ResponseEntity.ok("Email sent to " + request.getEmail());
     }
 
+    @Schema(description = "Request for manual sending of email notification")
     static class ManualNotificationRequest {
+        @Schema(description = "Recipient's email")
         private String email;
+        @Schema(description = "Subject of the letter")
         private String subject;
+        @Schema(description = "Letter text")
         private String body;
 
         public String getEmail() {
