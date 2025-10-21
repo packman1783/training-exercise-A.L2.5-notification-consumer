@@ -1,9 +1,14 @@
 package com.example.spring_kafka.controller;
 
+import com.example.spring_kafka.manualNotification.ManualNotificationRequest;
+import com.example.spring_kafka.manualNotification.ManualNotificationResponse;
+import com.example.spring_kafka.manualNotification.ManualNotificationResponseDoc;
 import com.example.spring_kafka.service.EmailService;
 
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,57 +31,43 @@ public class NotificationController {
     }
 
     @Operation(
-            summary = "Sending an email manually",
-            description = "Allows you to manually send an email notification without using Kafka.",
+            summary = "Sending an email manually (HATEOAS supported)",
+            description = "Allows you to manually send an email notification without using Kafka." +
+                    "Returns not only status but also navigational links (_links) for further actions.",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
                             description = "The letter was sent successfully.",
                             content = @Content(
-                                    mediaType = "text/plain",
-                                    schema = @Schema(example = "Email sent to test@mail.com")
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ManualNotificationResponseDoc.class)
                             )
                     )
             }
     )
     @PostMapping("/send")
-    public ResponseEntity<String> sendManualEmail(@RequestBody ManualNotificationRequest request) {
+    public ResponseEntity<EntityModel<ManualNotificationResponse>> sendManualEmail(
+            @RequestBody ManualNotificationRequest request) {
+
         emailService.sendEmail(request.getEmail(), request.getSubject(), request.getBody());
 
-        return ResponseEntity.ok("Email sent to " + request.getEmail());
+        ManualNotificationResponse response = new ManualNotificationResponse(
+                "Email sent to " + request.getEmail()
+        );
+
+        EntityModel<ManualNotificationResponse> model = EntityModel.of(response);
+        model.add(WebMvcLinkBuilder.linkTo(
+                        WebMvcLinkBuilder.methodOn(NotificationController.class).sendManualEmail(request))
+                .withSelfRel());
+        model.add(WebMvcLinkBuilder.linkTo(
+                        WebMvcLinkBuilder.methodOn(NotificationController.class).getHelp())
+                .withRel("help"));
+
+        return ResponseEntity.ok(model);
     }
 
-    @Schema(description = "Request for manual sending of email notification")
-    static class ManualNotificationRequest {
-        @Schema(description = "Recipient's email")
-        private String email;
-        @Schema(description = "Subject of the letter")
-        private String subject;
-        @Schema(description = "Letter text")
-        private String body;
-
-        public String getEmail() {
-            return email;
-        }
-
-        public void setEmail(String email) {
-            this.email = email;
-        }
-
-        public String getSubject() {
-            return subject;
-        }
-
-        public void setSubject(String subject) {
-            this.subject = subject;
-        }
-
-        public String getBody() {
-            return body;
-        }
-
-        public void setBody(String body) {
-            this.body = body;
-        }
+    @GetMapping("/help")
+    public String getHelp() {
+        return "Use /notification/send to manually send an email";
     }
 }
