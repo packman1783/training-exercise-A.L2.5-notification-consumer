@@ -10,6 +10,8 @@ The service listens to Kafka events about user actions and sends email notificat
 
 *swagger:* http://localhost:8081/swagger-ui.html
 
+HATEOAS implemented using `ModelAssembler` (a separate assembler class for generating models with links).
+
 Thanks to this project it was possible to learn:
 
 - realized OneToMany Bidirectional relationship
