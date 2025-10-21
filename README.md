@@ -1,7 +1,6 @@
-**Java Spring Boot, Kafka working with entity User and Account**
+**Java Spring Boot, Kafka working with entity NotificationEvent**
 
-When deleting or creating a user, the application must send a message to kafka,
-which contains information about the operation and the user’s email.
+The service listens to Kafka events about user actions and sends email notifications via EmailService.
 
 *work with message:*
 
@@ -9,6 +8,7 @@ which contains information about the operation and the user’s email.
 
 ``kafka-console-consumer --bootstrap-server localhost:9092 --topic user.notifications --from-beginning``
 
+*swagger:* http://localhost:8081/swagger-ui.html
 
 Thanks to this project it was possible to learn:
 
@@ -19,6 +19,7 @@ Thanks to this project it was possible to learn:
 - PostgreSQL
 - Kafka
 - test containers
+- swagger
 
 
 
