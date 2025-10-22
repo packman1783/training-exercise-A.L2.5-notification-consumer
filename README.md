@@ -1,24 +1,40 @@
-**Java Spring Boot, Kafka working with entity NotificationEvent**
+**Spring Boot service working with entity NotificationEvent**
 
-The service listens to Kafka events about user actions and sends email notifications via EmailService.
+Notification Service is a separate microservice for processing events from Kafka and sending email notifications.
+It listens for messages from the same topic and generates emails depending on the event type (USER_CREATED, USER_DELETED)
 
-*work with message:*
+HATEOAS implemented using ModelAssembler (a separate assembler class for generating models with links).
 
-``docker exec -it kafka bash``
+*example request:* 
+```
+{  
+  "email": "user@mail.com",  
+  "subject": "Hello",  
+  "body": "Manual email test"  
+}
+```
+*example response:*  
+```
+{  
+  "message": "Email sent to user@mail.com",  
+  "_links": {  
+    "self": { "href": "http://localhost:8081/notification/send" },  
+    "help": { "href": "http://localhost:8081/notification/help" }  
+  }  
+}  
+```
+*user service:* http://localhost:8080  
+*notification service:* http://localhost:8081  
+*swagger:* http://localhost:8081/swagger-ui.html  
+*mailhog:* http://localhost:8025
 
-``kafka-console-consumer --bootstrap-server localhost:9092 --topic user.notifications --from-beginning``
-
-*swagger:* http://localhost:8081/swagger-ui.html
-
-HATEOAS implemented using `ModelAssembler` (a separate assembler class for generating models with links).
-
-Thanks to this project it was possible to learn:
-
+Thanks to this project it was possible to learn:  
 - realized OneToMany Bidirectional relationship
 - work with REST API
 - Spring Data JPA
 - CRUD for User and Account
 - PostgreSQL
+- Spring Boot
 - Kafka
 - test containers
 - swagger
