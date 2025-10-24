@@ -2,13 +2,22 @@ package com.example.spring_kafka.manualNotification;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
 @Schema(description = "Request for manual sending of email notification.")
 public class ManualNotificationRequest {
     @Schema(description = "Recipient's email")
+    @Email
+    @NotBlank
     private String email;
+
     @Schema(description = "Subject of the letter")
+    @NotBlank
     private String subject;
+
     @Schema(description = "Letter text")
+    @NotBlank
     private String body;
 
     public String getEmail() {

@@ -5,6 +5,8 @@ import com.example.spring_kafka.manualNotification.ManualNotificationResponse;
 import com.example.spring_kafka.manualNotification.ManualNotificationResponseDoc;
 import com.example.spring_kafka.service.EmailService;
 
+import jakarta.validation.Valid;
+
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +49,7 @@ public class NotificationController {
     )
     @PostMapping("/send")
     public ResponseEntity<EntityModel<ManualNotificationResponse>> sendManualEmail(
-            @RequestBody ManualNotificationRequest request) {
+            @Valid @RequestBody ManualNotificationRequest request) {
 
         emailService.sendEmail(request.getEmail(), request.getSubject(), request.getBody());
 
