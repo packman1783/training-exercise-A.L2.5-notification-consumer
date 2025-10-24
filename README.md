@@ -25,7 +25,7 @@ HATEOAS implemented using ModelAssembler (a separate assembler class for generat
 ```
 *user service:* http://localhost:8080  
 *notification service:* http://localhost:8081  
-*swagger:* http://localhost:8081/swagger-ui.html  
+*swagger:* http://localhost:8081/swagger-ui.html or src/main/resources/static/openapi.json  
 *mailhog:* http://localhost:8025
 
 Thanks to this project it was possible to learn:  
