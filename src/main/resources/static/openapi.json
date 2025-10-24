@@ -1,0 +1,39 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "Spring Kafka Notification API",
+    "description" : "API for sending and receiving notifications via Kafka and Email",
+    "termsOfService" : null,
+    "contact" : {
+      "name" : "Tea Pot",
+      "url" : null,
+      "email" : "fake-email@mail.com",
+      "extensions" : null
+    },
+    "license" : null,
+    "version" : "1.0.0",
+    "extensions" : null,
+    "summary" : null
+  },
+  "externalDocs" : null,
+  "servers" : null,
+  "security" : null,
+  "tags" : null,
+  "paths" : { },
+  "components" : {
+    "schemas" : null,
+    "responses" : null,
+    "parameters" : null,
+    "examples" : null,
+    "requestBodies" : null,
+    "headers" : null,
+    "securitySchemes" : null,
+    "links" : null,
+    "callbacks" : null,
+    "extensions" : null,
+    "pathItems" : null
+  },
+  "extensions" : null,
+  "jsonSchemaDialect" : null,
+  "webhooks" : null
+}
