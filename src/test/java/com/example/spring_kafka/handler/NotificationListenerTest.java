@@ -10,6 +10,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static com.example.spring_kafka.event.OperationType.USER_CREATED;
+import static com.example.spring_kafka.event.OperationType.USER_DELETED;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.ArgumentMatchers.eq;
@@ -26,7 +28,7 @@ public class NotificationListenerTest {
 
     @Test
     void testUserCreatedSendsEmail() {
-        NotificationEvent event = new NotificationEvent("USER_CREATED", "test@example.com");
+        NotificationEvent event = new NotificationEvent(USER_CREATED, "test@example.com");
 
         listener.onNotification(event);
 
@@ -35,7 +37,7 @@ public class NotificationListenerTest {
 
     @Test
     void testUserDeletedSendsEmail() {
-        NotificationEvent event = new NotificationEvent("USER_DELETED", "test@example.com");
+        NotificationEvent event = new NotificationEvent(USER_DELETED, "test@example.com");
 
         listener.onNotification(event);
 
@@ -46,12 +48,5 @@ public class NotificationListenerTest {
     void testNullEventDoesNotSendEmail() {
         listener.onNotification(null);
         verify(emailService, never()).sendEmail(anyString(), anyString(), anyString());
-    }
-
-    @Test
-    void testUnknownOperationSendsGenericEmail() {
-        NotificationEvent event = new NotificationEvent("UNKNOWN", "test@example.com");
-        listener.onNotification(event);
-        verify(emailService).sendEmail(eq("test@example.com"), anyString(), contains("Event occurred"));
     }
 }
