@@ -6,6 +6,10 @@ import com.example.spring_kafka.service.EmailService;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
+import static com.example.spring_kafka.event.OperationType.USER_CREATED;
+import static com.example.spring_kafka.event.OperationType.USER_DELETED;
+import static com.example.spring_kafka.event.OperationType.USER_UPDATED;
+
 @Service
 public class NotificationListener {
     private final EmailService emailService;
@@ -16,19 +20,18 @@ public class NotificationListener {
 
     @KafkaListener(topics = "user.notifications", groupId = "notification-service-group")
     public void onNotification(NotificationEvent event) {
-        if (event == null || event.getEmail() == null) {
+        if (event == null || event.getEmail() == null || event.getOperation() == null) {
             return;
         }
 
         String subject = "Notice from Example";
         String body;
 
-        if ("USER_CREATED".equals(event.getOperation())) {
-            body = "Hello! Your account has been successfully created!!!";
-        } else if ("USER_DELETED".equals(event.getOperation())) {
-            body = "Your account has been deleted!!!";
-        } else {
-            body = "Event occurred: " + event.getOperation();
+        switch (event.getOperation()) {
+            case USER_CREATED -> body = "Hello! Your account has been successfully created!!!";
+            case USER_DELETED -> body = "Your account has been deleted!!!";
+            case USER_UPDATED -> body = "Your account data has been updated!";
+            default -> body = "Event occurred: " + event.getOperation();
         }
 
         emailService.sendEmail(event.getEmail(), subject, body);
