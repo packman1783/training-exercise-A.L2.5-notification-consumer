@@ -4,9 +4,9 @@ import com.example.spring_kafka.event.NotificationEvent;
 
 import com.example.spring_kafka.service.NotificationService;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 public class NotificationListener {
     private final NotificationService notificationService;
 
@@ -14,7 +14,7 @@ public class NotificationListener {
         this.notificationService = notificationService;
     }
 
-    @KafkaListener(topics = "user.notifications", groupId = "notification-service-group")
+    @KafkaListener(topics = "user.notifications", groupId = "${spring.kafka.consumer.group-id}")
     public void onNotification(NotificationEvent event) {
         notificationService.processNotification(event);
     }
