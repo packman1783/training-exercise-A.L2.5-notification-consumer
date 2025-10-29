@@ -2,7 +2,6 @@ package com.example.spring_kafka.controller;
 
 import com.example.spring_kafka.manualNotification.ManualNotificationRequest;
 import com.example.spring_kafka.manualNotification.ManualNotificationResponse;
-import com.example.spring_kafka.manualNotification.ManualNotificationResponseDoc;
 import com.example.spring_kafka.service.EmailService;
 
 import jakarta.validation.Valid;
@@ -26,6 +25,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping("/notification")
 @Tag(name = "Notification", description = "API for sending email notifications")
 public class NotificationController {
+
     private final EmailService emailService;
 
     public NotificationController(EmailService emailService) {
@@ -33,16 +33,15 @@ public class NotificationController {
     }
 
     @Operation(
-            summary = "Sending an email manually (HATEOAS supported)",
-            description = "Allows you to manually send an email notification without using Kafka." +
-                    "Returns not only status but also navigational links (_links) for further actions.",
+            summary = "Manually send an email (HATEOAS supported)",
+            description = "Allows sending an email notification manually without Kafka.",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "The letter was sent successfully.",
+                            description = "The email was sent successfully.",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ManualNotificationResponseDoc.class)
+                                    schema = @Schema(implementation = ManualNotificationResponse.class)
                             )
                     )
             }
@@ -53,23 +52,14 @@ public class NotificationController {
 
         emailService.sendEmail(request.getEmail(), request.getSubject(), request.getBody());
 
-        ManualNotificationResponse response = new ManualNotificationResponse(
-                "Email sent to " + request.getEmail()
-        );
+        ManualNotificationResponse response =
+                new ManualNotificationResponse("Email sent to " + request.getEmail());
 
         EntityModel<ManualNotificationResponse> model = EntityModel.of(response);
         model.add(WebMvcLinkBuilder.linkTo(
                         WebMvcLinkBuilder.methodOn(NotificationController.class).sendManualEmail(request))
                 .withSelfRel());
-        model.add(WebMvcLinkBuilder.linkTo(
-                        WebMvcLinkBuilder.methodOn(NotificationController.class).getHelp())
-                .withRel("help"));
 
         return ResponseEntity.ok(model);
-    }
-
-    @GetMapping("/help")
-    public String getHelp() {
-        return "Use /notification/send to manually send an email";
     }
 }
