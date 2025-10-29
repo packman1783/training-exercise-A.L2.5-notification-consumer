@@ -14,7 +14,7 @@ public class NotificationListener {
         this.notificationService = notificationService;
     }
 
-    @KafkaListener(topics = "user.notifications", groupId = "${spring.kafka.consumer.group-id}")
+    @KafkaListener(topics = "user.notifications", groupId = "notification-service-group")
     public void onNotification(NotificationEvent event) {
         notificationService.processNotification(event);
     }
