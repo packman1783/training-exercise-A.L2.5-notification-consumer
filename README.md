@@ -19,7 +19,6 @@ HATEOAS implemented using ModelAssembler (a separate assembler class for generat
   "message": "Email sent to user@mail.com",  
   "_links": {  
     "self": { "href": "http://localhost:8081/notification/send" },  
-    "help": { "href": "http://localhost:8081/notification/help" }  
   }  
 }  
 ```
