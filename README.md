@@ -1,7 +1,8 @@
 **Spring Boot service working with entity NotificationEvent**
 
 Notification Service is a separate microservice for processing events from Kafka and sending email notifications.
-It listens for messages from the same topic and generates emails depending on the event type (USER_CREATED, USER_DELETED)
+It listens for messages from the same topic and generates emails depending on the event type USER_CREATED, USER_DELETED  
+(Another part of service after creating or deleting user, the service generates NotificationEvent and sends it to the user.notifications Kafka topic)
 
 HATEOAS implemented using ModelAssembler (a separate assembler class for generating models with links).
 
