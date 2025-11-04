@@ -1,8 +1,8 @@
 package com.example.spring_kafka.handler;
 
 import com.example.spring_kafka.event.NotificationEvent;
-
 import com.example.spring_kafka.service.NotificationService;
+
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
