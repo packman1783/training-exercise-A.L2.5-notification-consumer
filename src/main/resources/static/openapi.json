@@ -10,13 +10,23 @@
       "email" : "fake-email@mail.com",
       "extensions" : null
     },
-    "license" : null,
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "https://www.apache.org/licenses/LICENSE-2.0.html",
+      "identifier" : null,
+      "extensions" : null
+    },
     "version" : "1.0.0",
     "extensions" : null,
     "summary" : null
   },
   "externalDocs" : null,
-  "servers" : null,
+  "servers" : [ {
+    "url" : "http://localhost:8080",
+    "description" : "Local development server",
+    "variables" : null,
+    "extensions" : null
+  } ],
   "security" : null,
   "tags" : null,
   "paths" : { },

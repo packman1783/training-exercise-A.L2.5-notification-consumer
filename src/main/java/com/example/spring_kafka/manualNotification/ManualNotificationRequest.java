@@ -7,16 +7,16 @@ import jakarta.validation.constraints.NotBlank;
 
 @Schema(description = "Request for manual sending of email notification.")
 public class ManualNotificationRequest {
-    @Schema(description = "Recipient's email")
+    @Schema(description = "Recipient's email", example = "user@mail.com")
     @Email
     @NotBlank
     private String email;
 
-    @Schema(description = "Subject of the letter")
+    @Schema(description = "Subject of the letter", example = "System Notification")
     @NotBlank
     private String subject;
 
-    @Schema(description = "Letter text")
+    @Schema(description = "Letter text", example = "Your task has been completed successfully.")
     @NotBlank
     private String body;
 
